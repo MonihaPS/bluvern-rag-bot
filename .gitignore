@@ -3,3 +3,4 @@ __pycache__/
 *.chroma
 .env
 gorq API key.txt
+hf_token.txt
