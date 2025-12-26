@@ -7,7 +7,7 @@ PAGE_ICON = "⚡"
 GROQ_API_KEY = os.getenv("GROQ_API_KEY")
 # AI Settings (Speed Optimized)
 MODEL_NAME = "llama-3.1-8b-instant"      # Fast model
-EMBEDDING_MODEL = "sentence-transformers/all-MiniLM-L6-v2" # Fast embeddings
+EMBEDDING_MODEL = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2") # Fast embeddings
 VECTOR_DB_DIR = "chroma_db_store"
 
 # Data Processing
