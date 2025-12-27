@@ -106,7 +106,7 @@ Open your browser and go to:
 ## 👤 Author
 
 **Moniha P S** 
-```bash
+```text
 B.Tech Artificial Intelligence & Data Science
 SREC
 ```
