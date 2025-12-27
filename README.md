@@ -47,9 +47,14 @@ src/
 ├── model.py           # RAG pipeline logic
 ├── server.py          # FastAPI backend
 ├── config.py          # Configuration settings
-├── knowledge_base.txt # Bluvern company knowledge
+└── knowledge_base.txt # Bluvern company knowledge
+```
 
-🔐 Security
+---
+
+## 🔐 Security
+
+```yaml
 security:
   api_keys:
     storage: environment_variables
@@ -59,35 +64,47 @@ security:
     tracked_in_git: false
   credentials:
     sensitive_data_in_repo: false
+```
 
-🔑 Environment Variables Setup
+---
+
+## 🔑 Environment Variables Setup
 
 This project requires external API keys to run.
 
-API keys are not included in the repository for security reasons and must be provided locally using environment variables.
+**API keys are not included in the repository** for security reasons and must be provided locally using environment variables.
 
-Create a .env file (local only)
+**1. Create a `.env` file (local only)** inside the root directory:
 
+```env
 GROQ_API_KEY=your_groq_api_key_here
-The .env file is excluded from version control and should never be pushed to GitHub.
+```
 
-▶️ Running the Project
+> **Note:** The `.env` file is excluded from version control and should never be pushed to GitHub.
 
-Install dependencies
+---
+
+## ▶️ Running the Project
+
+**1. Install dependencies**
+```bash
 pip install -r requirements.txt
+```
 
-Start the server
+**2. Start the server**
+```bash
 python -m src.server
+```
 
-Access the application
-http://localhost:8000
+**3. Access the application**
+Open your browser and go to:
+[http://localhost:8000](http://localhost:8000)
 
+**API Documentation** is available at:  
+[http://localhost:8000/docs](http://localhost:8000/docs)
 
-API documentation is available at:
+---
 
-http://localhost:8000/docs
+## 👤 Author
 
-👤 Author
-
-Moniha P S
-B.Tech Artificial Intelligence & Data Science
+**Moniha P S** B.Tech Artificial Intelligence & Data Science
