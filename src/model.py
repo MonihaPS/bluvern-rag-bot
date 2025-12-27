@@ -5,27 +5,26 @@ from langchain_core.prompts import ChatPromptTemplate
 from src import config
 
 def build_rag_chain(vectorstore):
-    """Constructs the RAG pipeline using Groq Cloud API."""
+    """Constructs the RAG pipeline using Groq Cloud LLM."""
     
-    # 1. Cloud LLM (Super Fast)
     if not config.GROQ_API_KEY:
-        raise ValueError("❌ Error: Missing Groq API Key in config.py")
+        raise ValueError("❌ Error: GROQ_API_KEY is missing in .env file")
 
+    # 1. Groq LLM (Fast Cloud Brain)
     llm = ChatGroq(
         model=config.MODEL_NAME, 
         api_key=config.GROQ_API_KEY,
         temperature=0
     )
     
-    # 2. Retriever
+    # 2. Retriever (Local Vector Store)
     retriever = vectorstore.as_retriever(search_kwargs={"k": config.SEARCH_K})
     
-    # 3. Professional Persona Prompt
+    # 3. Prompt
     system_prompt = (
-        "You are Bluvern's intelligent assistant. Your tone is professional, confident, and helpful. "
-        "Answer the question DIRECTLY and CONCISELY. "
-        "Do NOT use phrases like 'Based on the context' or 'The text says'. "
-        "If the answer is not in the context, politely say: 'I do not have that specific information right now.'\n\n"
+        "You are Bluvern's intelligent assistant. Your tone is professional and helpful. "
+        "Answer the question based ONLY on the context below. "
+        "If the answer is not in the context, say 'I don't have that info'.\n\n"
         "Context:\n{context}"
     )
     
@@ -34,7 +33,7 @@ def build_rag_chain(vectorstore):
         ("human", "{input}"),
     ])
     
-    # 4. Connect Chain
+    # 4. Chain
     question_answer_chain = create_stuff_documents_chain(llm, prompt)
     rag_chain = create_retrieval_chain(retriever, question_answer_chain)
     

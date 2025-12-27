@@ -1,39 +1,40 @@
-import requests
-from bs4 import BeautifulSoup
-from langchain_core.documents import Document
-from langchain_text_splitters import RecursiveCharacterTextSplitter
+from langchain_community.document_loaders import TextLoader
+from langchain.text_splitter import RecursiveCharacterTextSplitter
 from src import config
+import os
 
-def load_and_split_data(url):
-    """Fetches, cleans, and chunks the website content."""
-    print(f"🔄 Scraper: Fetching {url}...")
+def load_and_split_data(url=None):
+    """
+    Loads data from the local 'knowledge_base.txt' file 
+    instead of scraping the internet.
+    """
+    # 1. Locate the file safely
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+    file_path = os.path.join(current_dir, "knowledge_base.txt")
     
+    print(f"📄 Loading Knowledge Base from: {file_path}")
+    
+    if not os.path.exists(file_path):
+        print(f"❌ Error: Knowledge file not found at {file_path}")
+        print("   Please create 'src/knowledge_base.txt' first!")
+        return []
+
     try:
-        # 1. Fetch
-        response = requests.get(url, headers={"User-Agent": "Mozilla/5.0"}, timeout=10)
-        if response.status_code != 200:
-            return None
+        # 2. Load the text file
+        loader = TextLoader(file_path, encoding='utf-8')
+        data = loader.load()
         
-        # 2. Clean
-        soup = BeautifulSoup(response.content, 'html.parser')
-        # Remove scripts and styles to reduce noise
-        for script in soup(["script", "style"]):
-            script.decompose()
-            
-        text = soup.get_text(separator="\n")
-        clean_lines = [line.strip() for line in text.splitlines() if line.strip()]
-        clean_text = "\n".join(clean_lines)
-        
-        # 3. Create Document
-        docs = [Document(page_content=clean_text, metadata={"source": url})]
-        
-        # 4. Split (Optimize chunk size for speed)
-        splitter = RecursiveCharacterTextSplitter(
-            chunk_size=config.CHUNK_SIZE,
-            chunk_overlap=config.CHUNK_OVERLAP
+        # 3. Split into chunks (Paragraphs)
+        # We use a slightly larger chunk size to keep context together
+        text_splitter = RecursiveCharacterTextSplitter(
+            chunk_size=1000, 
+            chunk_overlap=200
         )
-        return splitter.split_documents(docs)
+        chunks = text_splitter.split_documents(data)
+        
+        print(f"✅ Loaded {len(chunks)} knowledge chunks.")
+        return chunks
         
     except Exception as e:
-        print(f"❌ Scraper Error: {e}")
-        return None
+        print(f"⚠️ Error processing knowledge base: {e}")
+        return []

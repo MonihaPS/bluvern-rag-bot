@@ -2,5 +2,5 @@ venv/
 __pycache__/
 *.chroma
 .env
-gorq API key.txt
-hf_token.txt
+*.txt
+chroma_db_store/

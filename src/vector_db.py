@@ -1,18 +1,24 @@
 from langchain_community.vectorstores import Chroma
-from langchain_huggingface import HuggingFaceEmbeddings
 from src import config
+import shutil
+import os
 
-def setup_vectorstore(chunks):
-    """Initializes the Vector DB with the chunks."""
-    if not chunks:
+def setup_vectorstore(documents):
+    if not documents:
+        print("⚠️ No documents found to index.")
         return None
-        
-    embeddings = HuggingFaceEmbeddings(model_name=config.EMBEDDING_MODEL)
+
+    # Optional: Clear old DB to prevent duplicates (Uncomment if needed)
+    # if os.path.exists(config.VECTOR_DB_DIR):
+    #     shutil.rmtree(config.VECTOR_DB_DIR)
+
+    print(f"📦 Creating Local Vector Store for {len(documents)} chunks...")
     
-    # Create an in-memory vector store for speed
+    # Creates the DB locally using the CPU model
     vectorstore = Chroma.from_documents(
-        documents=chunks, 
-        embedding=embeddings,
-        collection_name="bluvern_data"
+        documents=documents,
+        embedding=config.EMBEDDING_MODEL,
+        persist_directory=config.VECTOR_DB_DIR
     )
+    
     return vectorstore
