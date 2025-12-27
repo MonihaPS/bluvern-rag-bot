@@ -100,11 +100,10 @@ python -m src.server
 Open your browser and go to:
 [http://localhost:8000](http://localhost:8000)
 
-**API Documentation** is available at:  
-[http://localhost:8000/docs](http://localhost:8000/docs)
 
 ---
 
 ## 👤 Author
 
-**Moniha P S** B.Tech Artificial Intelligence & Data Science
+**Moniha P S** 
+B.Tech Artificial Intelligence & Data Science
